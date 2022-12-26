@@ -11,6 +11,6 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SubscriptionGroupScreen(scrollController: scrollController, id: id, name: name, actions: createCommonAppBarActions(context));
+    return SubscriptionGroupScreen(scrollController: scrollController, id: id, name: name, actions: createCommonAppBarActions(context), listViewScrollController: ScrollController());
   }
 }

@@ -30,14 +30,15 @@ class GroupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as GroupScreenArguments;
 
-    return SubscriptionGroupScreen(scrollController: ScrollController(), id: args.id, name: args.name, actions: []);
+    return SubscriptionGroupScreen(scrollController: ScrollController(), id: args.id, name: args.name, actions: [], listViewScrollController: ScrollController());
   }
 }
 
 class SubscriptionGroupScreenContent extends StatelessWidget {
   final String id;
+  final ScrollController listViewScrollController;
 
-  const SubscriptionGroupScreenContent({Key? key, required this.id}) : super(key: key);
+  const SubscriptionGroupScreenContent({Key? key, required this.id, required this.listViewScrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,7 @@ class SubscriptionGroupScreenContent extends StatelessWidget {
           chunks: chunks,
           includeReplies: group.includeReplies,
           includeRetweets: group.includeRetweets,
+	  listViewScrollController: listViewScrollController,
         );
       },
     );
@@ -88,11 +90,12 @@ class SubscriptionGroupFeedChunk {
 
 class SubscriptionGroupScreen extends StatelessWidget {
   final ScrollController scrollController;
+  final ScrollController listViewScrollController;
   final String id;
   final String name;
   final List<Widget> actions;
 
-  const SubscriptionGroupScreen({Key? key, required this.scrollController, required this.id, required this.name, required this.actions}) : super(key: key);
+  const SubscriptionGroupScreen({Key? key, required this.scrollController, required this.id, required this.name, required this.actions, required this.listViewScrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +126,12 @@ class SubscriptionGroupScreen extends StatelessWidget {
                   IconButton(
                       icon: const Icon(Icons.arrow_upward),
                       onPressed: () async {
-                        await scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                        await listViewScrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                      }),
+                  IconButton(
+                      icon: const Icon(Icons.arrow_downward),
+                      onPressed: () async {
+                        await listViewScrollController.animateTo(listViewScrollController.offset + 100000, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                       }),
                   IconButton(
                       icon: const Icon(Icons.refresh),
@@ -135,7 +143,7 @@ class SubscriptionGroupScreen extends StatelessWidget {
               )
             ];
           },
-          body: SubscriptionGroupScreenContent(id: id),
+          body: SubscriptionGroupScreenContent(id: id, listViewScrollController: this.listViewScrollController),
         );
       },
     );

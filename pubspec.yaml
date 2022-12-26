@@ -29,10 +29,6 @@ dependency_overrides:
     git:
       url: https://github.com/ThexXTURBOXx/catcher.git
       ref: 5c1df82b56339fe534058594f8f72c327c9cab85
-  flutter_iconpicker:
-    git:
-      url: https://github.com/Ahmadre/FlutterIconPicker.git
-      ref: bae6bb92d815efac1a1fded14b0d6573bdcdcaa1
   multi_select_flutter:
     git:
       url: https://github.com/kabagouda/multi_select_flutter.git
@@ -66,7 +62,7 @@ dependencies:
   file_picker: ^5.0.1
   flutter_colorpicker: ^1.0.3
   flutter_file_dialog: ^2.3.0
-  flutter_iconpicker: ^3.1.4+1
+  flutter_iconpicker: ^3.2.2
   flutter_local_notifications: ^10.0.0-dev.20
   flutter_localized_locales: ^2.0.3
   flutter_triple: ^1.2.7+2

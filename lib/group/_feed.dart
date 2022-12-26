@@ -23,6 +23,7 @@ class SubscriptionGroupFeed extends StatefulWidget {
   final bool includeReplies;
   final bool includeRetweets;
   final ScrollController? scrollController;
+  final ScrollController? listViewScrollController;
 
   const SubscriptionGroupFeed(
       {Key? key,
@@ -30,15 +31,19 @@ class SubscriptionGroupFeed extends StatefulWidget {
       required this.chunks,
       required this.includeReplies,
       required this.includeRetweets,
+      required this.listViewScrollController,
       this.scrollController})
       : super(key: key);
 
   @override
-  State<SubscriptionGroupFeed> createState() => _SubscriptionGroupFeedState();
+  State<SubscriptionGroupFeed> createState() => _SubscriptionGroupFeedState(listViewScrollController: this.listViewScrollController);
 }
 
 class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
   late PagingController<String?, TweetChain> _pagingController;
+  late ScrollController? listViewScrollController;
+
+  _SubscriptionGroupFeedState({required this.listViewScrollController}) : super();
 
   @override
   void initState() {
@@ -47,6 +52,11 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
     _pagingController = PagingController(firstPageKey: null);
     _pagingController.addPageRequestListener((cursor) async {
       await _listTweets(cursor);
+    });
+
+    print("${listViewScrollController}");
+    listViewScrollController?.addListener(() {
+      print("ccc ${listViewScrollController?.offset}");
     });
   }
 
@@ -233,7 +243,7 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
       child: ChangeNotifierProvider<TweetContextState>(
         create: (context) => TweetContextState(PrefService.of(context, listen: false).get(optionTweetsHideSensitive)),
         child: PagedListView<String?, TweetChain>(
-          scrollController: widget.scrollController,
+          scrollController: this.listViewScrollController,
           pagingController: _pagingController,
           addAutomaticKeepAlives: false,
           builderDelegate: PagedChildBuilderDelegate(
